@@ -1,22 +1,21 @@
--- ZILD HUB V1.1 - Hitbox Expander (Balanced) + Aimbot
+-- ZILD HUB V1.1 - Hitbox + Aimbot + Fly + Info
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "ZILD Hub V1.1",
    LoadingTitle = "ZILD Hub Loading...",
-   LoadingSubtitle = "Hitbox + Aimbot",
+   LoadingSubtitle = "Hitbox + Aimbot + Fly",
    ConfigurationSaving = {
       Enabled = true,
       FileName = "ZILD_Config"
    },
-   Discord = {
-      Enabled = false
-   },
+   Discord = { Enabled = false },
    KeySystem = false
 })
 
-local Tab = Window:CreateTab("Universal", 4483362458)
+-- Player Tab
+local Tab = Window:CreateTab("Player", 4483362458)
 Tab:CreateSection("Main Features")
 
 Rayfield:Notify({
@@ -33,7 +32,7 @@ Rayfield:Notify({
    }
 })
 
--- 🔵 Balanced Hitbox Expander
+-- 🔵 Hitbox Expander
 _G.HeadSize = 15
 _G.ExpandHitbox = false
 
@@ -74,7 +73,7 @@ local LocalPlayer = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 
 local AimbotEnabled = false
-local FOV = 100 -- Field of view for aiming
+local FOV = 100
 
 Tab:CreateButton({
    Name = "Toggle Aimbot",
@@ -97,10 +96,9 @@ local function GetClosestTarget()
          if onScreen then
             local dist = (Vector2.new(pos.X, pos.Y) - UserInputService:GetMouseLocation()).Magnitude
             if dist < shortestDistance then
-               -- Cone check (only front)
                local direction = (head.Position - Camera.CFrame.Position).Unit
                local dot = direction:Dot(Camera.CFrame.LookVector)
-               if dot > 0.75 then -- Only in front
+               if dot > 0.75 then
                   closestPlayer, shortestDistance = head, dist
                end
             end
@@ -118,3 +116,28 @@ RunService.RenderStepped:Connect(function()
       end
    end
 end)
+
+-- 🔥 Hacks Tab
+local HacksTab = Window:CreateTab("Hacks", 4483362458)
+HacksTab:CreateSection("Extra Scripts")
+
+HacksTab:CreateButton({
+   Name = "Fly Script Zild",
+   Callback = function()
+      Rayfield:Notify({
+         Title = "Loading Fly...",
+         Content = "Powered by ZILD",
+         Duration = 5
+      })
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/ZildWebHostCreator/ZildPowerFlyScript/refs/heads/main/ZildPowerFlyScriptV1"))()
+   end
+})
+
+-- 📝 Info Tab
+local InfoTab = Window:CreateTab("Info", 4483362458)
+InfoTab:CreateSection("Support the Creator")
+
+InfoTab:CreateParagraph({
+   Title = "Thanks for using ZILD Hub!",
+   Content = "Please subscribe to my channel, like my videos, and hit the notification bell 🔔 to stay updated with the latest features and enhancements. Your support means a lot!"
+})
