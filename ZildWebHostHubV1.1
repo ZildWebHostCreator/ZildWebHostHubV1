@@ -1,81 +1,70 @@
--- ZILD HUB V1.1 - Hitbox + Aimbot + Fly + Info
+-- ZILD Hub V1.1 (Rayfield UI Edition)
+-- Features: Aimbot + Balanced Hitbox + Fly + Info + Discord
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "ZILD Hub V1.1",
    LoadingTitle = "ZILD Hub Loading...",
-   LoadingSubtitle = "Hitbox + Aimbot + Fly",
+   LoadingSubtitle = "Aimbot, Hitbox, Fly",
    ConfigurationSaving = {
       Enabled = true,
       FileName = "ZILD_Config"
    },
-   Discord = { Enabled = false },
+   Discord = {
+      Enabled = false
+   },
    KeySystem = false
 })
 
--- Player Tab
-local Tab = Window:CreateTab("Player", 4483362458)
-Tab:CreateSection("Main Features")
+-- ✅ Tab 1: Player (Aimbot, Hitbox)
+local Tab1 = Window:CreateTab("Player", 4483362458)
+Tab1:CreateSection("Main Features")
 
 Rayfield:Notify({
    Title = "ZILD Hub Loaded",
-   Content = "Hitbox + Aimbot Activated",
+   Content = "Aimbot + Hitbox Ready!",
    Duration = 6,
    Actions = {
       Ok = {
          Name = "Ready!",
          Callback = function()
-            print("ZILD Hub ready.")
+            print("ZILD Hub initialized.")
          end
       }
    }
 })
 
--- 🔵 Hitbox Expander
-_G.HeadSize = 15
-_G.ExpandHitbox = false
-
-Tab:CreateButton({
-   Name = "Toggle Hitbox Expander (Balanced)",
-   Callback = function()
-       _G.ExpandHitbox = not _G.ExpandHitbox
-       Rayfield:Notify({
-           Title = "Hitbox Expander",
-           Content = _G.ExpandHitbox and "ON (Size 15)" or "OFF",
-           Duration = 4
-       })
-
-       game:GetService("RunService").RenderStepped:Connect(function()
-           if _G.ExpandHitbox then
-               for _, p in pairs(game.Players:GetPlayers()) do
-                   if p ~= game.Players.LocalPlayer and p.Character and p.Character:FindFirstChild("Head") then
-                       pcall(function()
-                           local head = p.Character.Head
-                           head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
-                           head.Transparency = 0.5
-                           head.BrickColor = BrickColor.new("Bright red")
-                           head.Material = Enum.Material.Neon
-                           head.CanCollide = false
-                       end)
-                   end
-               end
-           end
-       end)
-   end
-})
-
 -- 🎯 Aimbot
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local Camera = workspace.CurrentCamera
-local LocalPlayer = Players.LocalPlayer
-local UserInputService = game:GetService("UserInputService")
-
 local AimbotEnabled = false
 local FOV = 100
+local Camera = workspace.CurrentCamera
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
-Tab:CreateButton({
+local function GetClosestTarget()
+   local closest, shortest = nil, FOV
+   for _, player in pairs(Players:GetPlayers()) do
+      if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+         local head = player.Character.Head
+         local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
+         if onScreen then
+            local dist = (Vector2.new(pos.X, pos.Y) - UserInputService:GetMouseLocation()).Magnitude
+            if dist < shortest then
+               local direction = (head.Position - Camera.CFrame.Position).Unit
+               if direction:Dot(Camera.CFrame.LookVector) > 0.75 then
+                  closest, shortest = head, dist
+               end
+            end
+         end
+      end
+   end
+   return closest
+end
+
+Tab1:CreateButton({
    Name = "Toggle Aimbot",
    Callback = function()
       AimbotEnabled = not AimbotEnabled
@@ -87,27 +76,6 @@ Tab:CreateButton({
    end
 })
 
-local function GetClosestTarget()
-   local closestPlayer, shortestDistance = nil, FOV
-   for _, player in pairs(Players:GetPlayers()) do
-      if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
-         local head = player.Character.Head
-         local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
-         if onScreen then
-            local dist = (Vector2.new(pos.X, pos.Y) - UserInputService:GetMouseLocation()).Magnitude
-            if dist < shortestDistance then
-               local direction = (head.Position - Camera.CFrame.Position).Unit
-               local dot = direction:Dot(Camera.CFrame.LookVector)
-               if dot > 0.75 then
-                  closestPlayer, shortestDistance = head, dist
-               end
-            end
-         end
-      end
-   end
-   return closestPlayer
-end
-
 RunService.RenderStepped:Connect(function()
    if AimbotEnabled then
       local target = GetClosestTarget()
@@ -117,27 +85,75 @@ RunService.RenderStepped:Connect(function()
    end
 end)
 
--- 🔥 Hacks Tab
-local HacksTab = Window:CreateTab("Hacks", 4483362458)
-HacksTab:CreateSection("Extra Scripts")
+-- 🔵 Hitbox Expander (Balanced)
+_G.HeadSize = 15
+_G.ExpandHitbox = false
 
-HacksTab:CreateButton({
-   Name = "Fly Script Zild",
+Tab1:CreateButton({
+   Name = "Toggle Hitbox Expander (Balanced)",
    Callback = function()
+      _G.ExpandHitbox = not _G.ExpandHitbox
       Rayfield:Notify({
-         Title = "Loading Fly...",
-         Content = "Powered by ZILD",
-         Duration = 5
+         Title = "Hitbox Expander",
+         Content = _G.ExpandHitbox and "ON (Size 15)" or "OFF",
+         Duration = 4
       })
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/ZildWebHostCreator/ZildPowerFlyScript/refs/heads/main/ZildPowerFlyScriptV1"))()
+
+      game:GetService("RunService").RenderStepped:Connect(function()
+         if _G.ExpandHitbox then
+            for _, p in pairs(Players:GetPlayers()) do
+               if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") then
+                  pcall(function()
+                     local head = p.Character.Head
+                     head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
+                     head.Transparency = 0.5
+                     head.BrickColor = BrickColor.new("Bright red")
+                     head.Material = Enum.Material.Neon
+                     head.CanCollide = false
+                  end)
+               end
+            end
+         end
+      end)
    end
 })
 
--- 📝 Info Tab
-local InfoTab = Window:CreateTab("Info", 4483362458)
-InfoTab:CreateSection("Support the Creator")
+-- 🚀 Tab 2: Hacks (Fly Script)
+local Tab2 = Window:CreateTab("Hacks", 4483362458)
+Tab2:CreateSection("Fly Feature")
 
-InfoTab:CreateParagraph({
-   Title = "Thanks for using ZILD Hub!",
-   Content = "Please subscribe to my channel, like my videos, and hit the notification bell 🔔 to stay updated with the latest features and enhancements. Your support means a lot!"
+Tab2:CreateButton({
+   Name = "Fly Script Zild",
+   Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/ZildWebHostCreator/ZildPowerFlyScript/refs/heads/main/ZildPowerFlyScriptV1"))()
+      Rayfield:Notify({
+         Title = "Fly Loaded",
+         Content = "Powered by ZILD",
+         Duration = 5
+      })
+   end
+})
+
+-- 📢 Tab 3: Info
+local Tab3 = Window:CreateTab("Info", 4483362458)
+Tab3:CreateSection("📌 Join Our Discord")
+
+Tab3:CreateParagraph({Title = "Join Now!", Content = "Click the button below to join the official ZILD Hub community."})
+
+Tab3:CreateButton({
+   Name = "🌐 Join Discord Server",
+   Callback = function()
+      setclipboard("https://discord.gg/vBUqNvSc")
+      Rayfield:Notify({
+         Title = "Discord Link Copied",
+         Content = "Paste it in your browser to join!",
+         Duration = 5
+      })
+   end
+})
+
+Tab3:CreateSection("📄 Credits / Info")
+Tab3:CreateParagraph({
+   Title = "ZILD Hub Info",
+   Content = "Thanks for using ZILD Hub V1.1!\n\nPlease support the developer:\n✅ Subscribe to my channel\n✅ Like my videos\n✅ Click the notification bell\n\nThis hub is designed for mobile & PC users.\nMade with ❤️ by ZILD."
 })
