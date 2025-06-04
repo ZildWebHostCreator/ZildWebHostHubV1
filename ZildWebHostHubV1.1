@@ -1,0 +1,120 @@
+-- ZILD HUB V1.1 - Hitbox Expander (Balanced) + Aimbot
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "ZILD Hub V1.1",
+   LoadingTitle = "ZILD Hub Loading...",
+   LoadingSubtitle = "Hitbox + Aimbot",
+   ConfigurationSaving = {
+      Enabled = true,
+      FileName = "ZILD_Config"
+   },
+   Discord = {
+      Enabled = false
+   },
+   KeySystem = false
+})
+
+local Tab = Window:CreateTab("Universal", 4483362458)
+Tab:CreateSection("Main Features")
+
+Rayfield:Notify({
+   Title = "ZILD Hub Loaded",
+   Content = "Hitbox + Aimbot Activated",
+   Duration = 6,
+   Actions = {
+      Ok = {
+         Name = "Ready!",
+         Callback = function()
+            print("ZILD Hub ready.")
+         end
+      }
+   }
+})
+
+-- 🔵 Balanced Hitbox Expander
+_G.HeadSize = 15
+_G.ExpandHitbox = false
+
+Tab:CreateButton({
+   Name = "Toggle Hitbox Expander (Balanced)",
+   Callback = function()
+       _G.ExpandHitbox = not _G.ExpandHitbox
+       Rayfield:Notify({
+           Title = "Hitbox Expander",
+           Content = _G.ExpandHitbox and "ON (Size 15)" or "OFF",
+           Duration = 4
+       })
+
+       game:GetService("RunService").RenderStepped:Connect(function()
+           if _G.ExpandHitbox then
+               for _, p in pairs(game.Players:GetPlayers()) do
+                   if p ~= game.Players.LocalPlayer and p.Character and p.Character:FindFirstChild("Head") then
+                       pcall(function()
+                           local head = p.Character.Head
+                           head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
+                           head.Transparency = 0.5
+                           head.BrickColor = BrickColor.new("Bright red")
+                           head.Material = Enum.Material.Neon
+                           head.CanCollide = false
+                       end)
+                   end
+               end
+           end
+       end)
+   end
+})
+
+-- 🎯 Aimbot
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
+local AimbotEnabled = false
+local FOV = 100 -- Field of view for aiming
+
+Tab:CreateButton({
+   Name = "Toggle Aimbot",
+   Callback = function()
+      AimbotEnabled = not AimbotEnabled
+      Rayfield:Notify({
+         Title = "Aimbot",
+         Content = AimbotEnabled and "Enabled" or "Disabled",
+         Duration = 4
+      })
+   end
+})
+
+local function GetClosestTarget()
+   local closestPlayer, shortestDistance = nil, FOV
+   for _, player in pairs(Players:GetPlayers()) do
+      if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+         local head = player.Character.Head
+         local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
+         if onScreen then
+            local dist = (Vector2.new(pos.X, pos.Y) - UserInputService:GetMouseLocation()).Magnitude
+            if dist < shortestDistance then
+               -- Cone check (only front)
+               local direction = (head.Position - Camera.CFrame.Position).Unit
+               local dot = direction:Dot(Camera.CFrame.LookVector)
+               if dot > 0.75 then -- Only in front
+                  closestPlayer, shortestDistance = head, dist
+               end
+            end
+         end
+      end
+   end
+   return closestPlayer
+end
+
+RunService.RenderStepped:Connect(function()
+   if AimbotEnabled then
+      local target = GetClosestTarget()
+      if target then
+         Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position)
+      end
+   end
+end)
