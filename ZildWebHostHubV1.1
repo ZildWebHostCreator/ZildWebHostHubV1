@@ -1,159 +1,143 @@
--- ZILD Hub V1.1 (Rayfield UI Edition)
--- Features: Aimbot + Balanced Hitbox + Fly + Info + Discord
+-- This script was protected using the MoonVeil Obfuscator v1.2.1 [https://moonveil.cc]
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
-local Window = Rayfield:CreateWindow({
-   Name = "ZILD Hub V1.1",
-   LoadingTitle = "ZILD Hub Loading...",
-   LoadingSubtitle = "Aimbot, Hitbox, Fly",
-   ConfigurationSaving = {
-      Enabled = true,
-      FileName = "ZILD_Config"
-   },
-   Discord = {
-      Enabled = false
-   },
-   KeySystem = false
-})
-
--- ✅ Tab 1: Player (Aimbot, Hitbox)
-local Tab1 = Window:CreateTab("Player", 4483362458)
-Tab1:CreateSection("Main Features")
-
-Rayfield:Notify({
-   Title = "ZILD Hub Loaded",
-   Content = "Aimbot + Hitbox Ready!",
-   Duration = 6,
-   Actions = {
-      Ok = {
-         Name = "Ready!",
-         Callback = function()
-            print("ZILD Hub initialized.")
-         end
-      }
-   }
-})
-
--- 🎯 Aimbot
-local AimbotEnabled = false
-local FOV = 100
-local Camera = workspace.CurrentCamera
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
-local function GetClosestTarget()
-   local closest, shortest = nil, FOV
-   for _, player in pairs(Players:GetPlayers()) do
-      if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
-         local head = player.Character.Head
-         local pos, onScreen = Camera:WorldToViewportPoint(head.Position)
-         if onScreen then
-            local dist = (Vector2.new(pos.X, pos.Y) - UserInputService:GetMouseLocation()).Magnitude
-            if dist < shortest then
-               local direction = (head.Position - Camera.CFrame.Position).Unit
-               if direction:Dot(Camera.CFrame.LookVector) > 0.75 then
-                  closest, shortest = head, dist
-               end
-            end
-         end
-      end
-   end
-   return closest
+local g=table.unpack;
+local j,w,z,m,s,o,k,t,h,p,a
+k,s={[-3109]=15991,[-19679]=13107,[-28335]=-8060,[-2868]=-30029,[-22684]=13389,[11674]=-30423,[-12824]=10848,[18918]=29254,[-25942]=27031,[22593]=-22175,[-12273]=-20630,[-27013]=-14052,[22752]=-20341,[17111]=1980,[-6687]=-20341,[21433]=-8060,[-3917]=-8060,[27837]=10848,[-28065]=-22175,[31376]=-22175,[28545]=-8060,[-6327]=29254,[13428]=29254,[30923]=15991,[20448]=15991,[22853]=15991},function(b)
+    return k[b- -15254]
 end
-
-Tab1:CreateButton({
-   Name = "Toggle Aimbot",
-   Callback = function()
-      AimbotEnabled = not AimbotEnabled
-      Rayfield:Notify({
-         Title = "Aimbot",
-         Content = AimbotEnabled and "Enabled" or "Disabled",
-         Duration = 4
-      })
-   end
-})
-
-RunService.RenderStepped:Connect(function()
-   if AimbotEnabled then
-      local target = GetClosestTarget()
-      if target then
-         Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position)
-      end
-   end
-end)
-
--- 🔵 Hitbox Expander (Balanced)
-_G.HeadSize = 15
-_G.ExpandHitbox = false
-
-Tab1:CreateButton({
-   Name = "Toggle Hitbox Expander (Balanced)",
-   Callback = function()
-      _G.ExpandHitbox = not _G.ExpandHitbox
-      Rayfield:Notify({
-         Title = "Hitbox Expander",
-         Content = _G.ExpandHitbox and "ON (Size 15)" or "OFF",
-         Duration = 4
-      })
-
-      game:GetService("RunService").RenderStepped:Connect(function()
-         if _G.ExpandHitbox then
-            for _, p in pairs(Players:GetPlayers()) do
-               if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("Head") then
-                  pcall(function()
-                     local head = p.Character.Head
-                     head.Size = Vector3.new(_G.HeadSize, _G.HeadSize, _G.HeadSize)
-                     head.Transparency = 0.5
-                     head.BrickColor = BrickColor.new("Bright red")
-                     head.Material = Enum.Material.Neon
-                     head.CanCollide = false
-                  end)
-               end
-            end
-         end
-      end)
-   end
-})
-
--- 🚀 Tab 2: Hacks (Fly Script)
-local Tab2 = Window:CreateTab("Hacks", 4483362458)
-Tab2:CreateSection("Fly Feature")
-
-Tab2:CreateButton({
-   Name = "Fly Script Zild",
-   Callback = function()
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/ZildWebHostCreator/ZildPowerFlyScript/refs/heads/main/ZildPowerFlyScriptV1"))()
-      Rayfield:Notify({
-         Title = "Fly Loaded",
-         Content = "Powered by ZILD",
-         Duration = 5
-      })
-   end
-})
-
--- 📢 Tab 3: Info
-local Tab3 = Window:CreateTab("Info", 4483362458)
-Tab3:CreateSection("📌 Join Our Discord")
-
-Tab3:CreateParagraph({Title = "Join Now!", Content = "Click the button below to join the official ZILD Hub community."})
-
-Tab3:CreateButton({
-   Name = "🌐 Join Discord Server",
-   Callback = function()
-      setclipboard("https://discord.gg/vBUqNvSc")
-      Rayfield:Notify({
-         Title = "Discord Link Copied",
-         Content = "Paste it in your browser to join!",
-         Duration = 5
-      })
-   end
-})
-
-Tab3:CreateSection("📄 Credits / Info")
-Tab3:CreateParagraph({
-   Title = "ZILD Hub Info",
-   Content = "Thanks for using ZILD Hub V1.1!\n\nPlease support the developer:\n✅ Subscribe to my channel\n✅ Like my videos\n✅ Click the notification bell\n\nThis hub is designed for mobile & PC users.\nMade with ❤️ by ZILD."
-})
+h=s(16122)
+repeat
+    while true do
+        if h==-359164787+359144446 then
+            a=(function(...)
+                local q=m('#',...)
+                local e=j(q,nil);
+                o({...},1,q,1,e)
+                return{[1]=e,[2]=q}
+            end);
+            h=s(-27527);
+            break;
+        elseif h==-1826301764- -1826293704 then
+            p,z,t=(string.char),(string.byte),(bit32 .bxor);
+            h=s(7599);
+        elseif h==-1728240251+1728256242 then
+            m,j,o=(select),(table.create),(table.move);
+            h=s(-21941);
+        elseif h==174483992-174506167 then
+            w=(getfenv());
+            h=s(13291);
+        end
+    end
+until h==-716964777- -716944147
+local y,f,_,n,i,r,l,d
+r,y={[654]=-11342,[31243]=-1326,[7028]=23418,[-13533]=23346,[-25867]=24480,[1632]=26824,[30162]=-31961,[12349]=-12148,[7095]=-957,[21662]=-12193,[-31239]=31454,[-20096]=-844,[-4628]=14774,[15670]=-31122,[-3186]=-3208,[-32030]=-20625,[-15479]=28133,[442]=3546,[22501]=-20301,[-22103]=26824,[-32681]=23346},function(x)
+    return r[x+23684]
+end
+_=y(-56365)
+repeat
+    while true do
+        if _==-61680324176150/1929862150 then
+            f='D!'
+            _=-5.0520495887530377e-05*-432557116
+        elseif _==-1252330833- -1252318486 then
+            l=i[l]
+            _=1860523510-1860525282
+        elseif _==15609772836936/-1568663736 then
+            f=w[f]
+            _=-0.00072719514275266454*43823175
+        elseif _==1513937126-1513910302 then
+            _=y(-28312);
+            break;
+        elseif _==-1472071681+1472095027 then
+            n='v\167\168x\215n\186\160r\195'
+            _=y(-2022)
+        elseif _==8.3242314849057325e-06*-1362528183 then
+            n=n(g(i[1],1,i[2]))
+            _=43573785546566/1699048021
+        elseif _==-6.1347683455637546e-06*1971875598 then
+            i=w[f]
+            _=y(-16656)
+        elseif _==4.410379246357664e-05*713181299 then
+            n=w[n]
+            _=y(-39163)
+        elseif _==555929634-555930960 then
+            l='\231\244*f\188\fYwob\250\171\210\29\21]C-\143\231OQl\248\16{\26\6b\150\183mNv\n]xt\223\159\185\\^\31\246/\24\192\193\49\"\187'
+            _=y(-8014)
+        elseif _==-484614198- -484612426 then
+            f=g(f,d,l)
+            _=-1228352942601/123440151
+        elseif _==-1.4571051432942422e-05*-1499754503 then
+            i=a((function(c,u)
+                local v=''
+                for A=0,#c-1 do
+                    v=v..p(t(z(c,A+1),z(u,A%#u+1)))
+                end
+                return v
+            end)(i,f))
+            _=-1314547913+1314535816
+        elseif _==26728302214080/-1775259180 then
+            l=2
+            _=-1599555555- -1599543208
+        elseif _==-8.9311951754687839e-07*1071525122 then
+            d=1
+            _=3.2423592074911747e-05*-464353239
+        elseif _==1991435406-1991424540 then
+            i=a(i(f,g(d[1],1,d[2])))
+            _=y(-23030)
+        elseif _==163897670-163873190 then
+            f=a((function(c,u)
+                local v=''
+                for A=0,#c-1 do
+                    v=v..p(t(z(c,A+1),z(u,A%#u+1)))
+                end
+                return v
+            end)(f,d))
+            _=y(-23242)
+        elseif _==-5456254447352/449148374 then
+            f=1
+            _=y(-26870)
+        elseif _==-378200332+378225978 then
+            n=n()
+            _=y(-45787)
+        elseif _==-15635331709193/-555764821 then
+            i='#@)D'
+            _=y(6478)
+        elseif _==137753281-137784403 then
+            d=a((function(c,u)
+                local v=''
+                for A=0,#c-1 do
+                    v=v..p(t(z(c,A+1),z(u,A%#u+1)))
+                end
+                return v
+            end)(d,l))
+            _=-18490877980308/-1701718938
+        elseif _==6.5930182744980971e-06*-1849380586 then
+            i='\26\200\201\28\164'
+            _=299702776+-299696123
+        elseif _==899554049+-899547396 then
+            n=(function(c,u)
+                local v=''
+                for A=0,#c-1 do
+                    v=v..p(t(z(c,A+1),z(u,A%#u+1)))
+                end
+                return v
+            end)(n,i)
+            _=y(-54923)
+        elseif _==1055736806-1055768674 then
+            d="\143\128^\22\207\54vX\29\3\141\133\181ta5\54O\250\148*#\15\151~\15\127h\22\184\212\2#YP4\20\16\136\250\219\20\49l\130lj\165\160EM\201\200\174C\n\216[<\21\'\r\137\223\154hw\vr\2\253\130)\"C\144u\26~uM\251\214\4 YP4\20\16\136\250\219\20\49l\130gm\162\151\0\f\138"
+            _=y(7559)
+        elseif _==1806412382-1806413226 then
+            d='\25\49\155'
+            _=y(-49551)
+        elseif _==745440937+-745437391 then
+            i=i[g(f[1],1,f[2])]
+            _=y(-11335)
+        elseif _==1.1635330665367943e-05*2012663041 then
+            f='QE\239iv\254m'
+            _=y(-43780)
+        elseif _==1098876535+-1098879743 then
+            f=i[f]
+            _=y(-16589)
+        end
+    end
+until _==9482524806060/641838690
